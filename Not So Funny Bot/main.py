@@ -39,10 +39,14 @@ async def on_message(message): # only triggers when certain message from others 
     # await allows to wait for message to be received
     await message.channel.send(random.choice(greetings))
 
+  # Have starter jokes and jokes in db together
   options = starter_jokes
   if "jokes" in db.keys():
     options = options + list(db["jokes"])
   print(db["jokes"])
+
+  if msg.startswith('-help'): # Gives documentations
+    await message.channel.send('Commands for Not Funny Bot: \n -joke : Robot gives joke \n -new_joke : Add new joke to bot\'s database \n -del_joke : Delete joke stored in bot\'s database')
 
   if msg.startswith('-joke'): # The "joke" command
     # await allows to wait for message to be received
