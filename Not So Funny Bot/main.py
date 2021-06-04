@@ -53,16 +53,26 @@ async def on_message(message): # only triggers when certain message from others 
     await message.channel.send(random.choice(options))
   
   if msg.startswith("-new_joke"): # adding new joke from discord server
-    joke_message = msg.split("-new", 1)[1] # take off "-new" from message
+    joke_message = msg.split("-new_joke", 1)[1] # take off "-new" from message
     update_joke(joke_message) # add joke to db using function
     await message.channel.send("New joke added")
 
   if msg.startswith("-del_joke"): # delete joke command from discord server
     jokes = []
     if "jokes" in db.keys():
-      index = int(msg.split("-del", 1)[1]) # Get index and convert it to int
+      index = int(msg.split("-del_joke", 1)[1]) # Get index and convert it to int
       delete_joke(index) # delete joke in db using function
       jokes = db["jokes"]
-      await message.channel.send(jokes) # Send list of jokes as message
+
+      listOfJokesString = ""
+      for i in range(len(db["jokes"])):
+        if (len(listOfJokesString) + len(str(i + 1) + ". " + db["jokes"][i]) <= 2000):
+          listOfJokesString = listOfJokesString + str(i + 1) + ". " + db["jokes"][i] + "\n"
+        else: # Clean comment after character limit is reached
+          await message.channel.send(listOfJokesString)
+          listOfJokesString = ""
+          listOfJokesString = listOfJokesString + str(i + 1) + ". " + db["jokes"][i] + "\n"
+
+      await message.channel.send(listOfJokesString) # Send list of jokes as message
 
 client.run(os.environ['TOKEN']) # Run bot using private token
