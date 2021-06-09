@@ -32,24 +32,95 @@ async def on_message(message): # only triggers when certain message from others 
   if message.content.startswith('-add'): # The add command
     # await allows to wait for message to be received
     numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
-    print(numbers)
-    # need to convert list of strings to values
-    data = numberListConversion(message, numbers)
+    data = numberListConversion(message, numbers) # need to convert list of strings to values
     if (data[1] != ''):
       await message.channel.send(data[1])
     
-    total = 0
+    total = 0 # start number at zero
     for i in range(len(data[0])):
       total = total + data[0][i]
 
-    await message.channel.send("The answer is: " + str(total))
+    await message.channel.send("The sum is: " + str(total))
 
 # subtract command -------------------------------------------------------------------
+  if message.content.startswith('-subtract'): # The subtract command
+    # await allows to wait for message to be received
+    numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
+    data = numberListConversion(message, numbers) # need to convert list of strings to values
+    if (data[1] != ''):
+      await message.channel.send(data[1])
+    
+    total = data[0][0] # grab first numbered input
+    for i in range(1, len(data[0])):
+      total = total - data[0][i]
+
+    await message.channel.send("The difference is: " + str(total))
 
 # multiplication command -------------------------------------------------------------
+  if message.content.startswith('-mult'): # The multiplication command
+    # await allows to wait for message to be received
+    numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
+    data = numberListConversion(message, numbers) # need to convert list of strings to values
+    if (data[1] != ''):
+      await message.channel.send(data[1])
+    
+    total = 0 # start number at zero
+    if (len(data[0]) == 0):
+      total = 0
+    else:
+      total = 1
+    for i in range(len(data[0])):
+      total = total * data[0][i]
+
+    await message.channel.send("The product is: " + str(total))
 
 # division command -------------------------------------------------------------------
+  if message.content.startswith('-div'): # The division command
+    # await allows to wait for message to be received
+    numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
+    data = numberListConversion(message, numbers) # need to convert list of strings to values
+    if (data[1] != ''):
+      await message.channel.send(data[1])
+    
+    zeroFlag = False # Tells if there is a flag
+    total = data[0][0] # grab first numbered input
+    for i in range(1, len(data[0])):
+      if (data[0][i] != 0):
+        total = total / data[0][i]
+      else: # failsafe for zeroes
+        zeroFlag = True
+        await message.channel.send("A zero is not used as first input for division, abort calcluation")
+        break
+
+    if (zeroFlag == False):
+      await message.channel.send("The quotient is: " + str(total))
 
 # power command ----------------------------------------------------------------------
+  if message.content.startswith('-power'): # The multiplication command
+      # await allows to wait for message to be received
+      numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
+      data = numberListConversion(message, numbers) # need to convert list of strings to values
+      if (data[1] != ''):
+        await message.channel.send(data[1])
+      
+      total = data[0][0] # grab first number
+      for i in range(1, len(data[0])):
+        total = total ** data[0][i]
 
+      await message.channel.send("The power product is: " + str(total))
+
+# modulus command---------------------------------------------------------------------
+  if message.content.startswith('-power'): # The multiplication command
+    # await allows to wait for message to be received
+    numbers = message.content.split(' ')[1:] # only get string of numbers and spaces
+    data = numberListConversion(message, numbers) # need to convert list of strings to values
+    if (data[1] != ''):
+      await message.channel.send(data[1])
+    
+    if (len(data[0]) == 2):
+      total = data[0][0] % data[0][1] # calculate modulus
+      await message.channel.send("The modulus is: " + str(total))
+    else:
+      await message.channel.send("Not an appropriate amount of numbers for modulus function")
+    
 client.run(os.environ['TOKEN']) # Run bot using private token
