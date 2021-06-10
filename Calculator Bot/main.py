@@ -40,6 +40,9 @@ async def on_message(message): # only triggers when certain message from others 
     for i in range(len(data[0])):
       total = total + data[0][i]
 
+    if (total.is_integer()): # Convert float to int if float decimal is 0
+      total = int(total)
+
     await message.channel.send("The sum is: " + str(total))
 
 # subtract command -------------------------------------------------------------------
@@ -53,6 +56,9 @@ async def on_message(message): # only triggers when certain message from others 
     total = data[0][0] # grab first numbered input
     for i in range(1, len(data[0])):
       total = total - data[0][i]
+
+    if (total.is_integer()): # Convert float to int if float decimal is 0
+      total = int(total)
 
     await message.channel.send("The difference is: " + str(total))
 
@@ -71,6 +77,9 @@ async def on_message(message): # only triggers when certain message from others 
       total = 1
     for i in range(len(data[0])):
       total = total * data[0][i]
+
+    if (total.is_integer()): # Convert float to int if float decimal is 0
+      total = int(total)
 
     await message.channel.send("The product is: " + str(total))
 
@@ -92,6 +101,9 @@ async def on_message(message): # only triggers when certain message from others 
         await message.channel.send("A zero is not used as first input for division, abort calcluation")
         break
 
+    if (total.is_integer()): # Convert float to int if float decimal is 0
+      total = int(total)
+
     if (zeroFlag == False):
       await message.channel.send("The quotient is: " + str(total))
 
@@ -107,6 +119,9 @@ async def on_message(message): # only triggers when certain message from others 
       for i in range(1, len(data[0])):
         total = total ** data[0][i]
 
+      if (total.is_integer()): # Convert float to int if float decimal is 0
+        total = int(total)
+
       await message.channel.send("The power product is: " + str(total))
 
 # modulus command---------------------------------------------------------------------
@@ -119,8 +134,14 @@ async def on_message(message): # only triggers when certain message from others 
     
     if (len(data[0]) == 2):
       total = data[0][0] % data[0][1] # calculate modulus
+      if (total.is_integer()): # Convert float to int if float decimal is 0
+        total = int(total)
+
       await message.channel.send("The modulus is: " + str(total))
     else:
       await message.channel.send("Not an appropriate amount of numbers for modulus function")
+
+# deep division command---------------------------------------------------------------
+
     
 client.run(os.environ['TOKEN']) # Run bot using private token
