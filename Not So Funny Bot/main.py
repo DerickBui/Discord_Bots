@@ -2,6 +2,7 @@ import os
 import discord
 import random
 from replit import db
+from keep_alive import keep_alive
 
 client = discord.Client()
 
@@ -23,7 +24,7 @@ def delete_joke(index): # delete joke in db function
     db["jokes"] = jokes
 
 @client.event # asynchronous library
-async def on_ready(): # only starts when bot is ready and working for use
+async def on_ready(): # only starts when bot is ready and working for use, tells that the bot is online
   print('We have logged in as {0.user}'.format(client))
 
 @client.event
@@ -53,7 +54,7 @@ async def on_message(message): # only triggers when certain message from others 
     await message.channel.send(random.choice(options))
   
   if msg.startswith("-new_joke"): # adding new joke from discord server
-    joke_message = msg.split("-new_joke", 1)[1] # take off "-new" from message
+    joke_message = msg.split("-new_joke", 1)[1] # take off "-new_joke" from message
     update_joke(joke_message) # add joke to db using function
     await message.channel.send("New joke added")
 
@@ -75,4 +76,5 @@ async def on_message(message): # only triggers when certain message from others 
 
       await message.channel.send(listOfJokesString) # Send list of jokes as message
 
+keep_alive()
 client.run(os.environ['TOKEN']) # Run bot using private token
