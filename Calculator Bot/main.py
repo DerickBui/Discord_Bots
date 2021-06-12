@@ -2,6 +2,7 @@ import os
 import discord
 import random
 from replit import db
+from keep_alive import keep_alive
 
 # function that converts list of strings into float
 def numberListConversion(message, stringedNums):
@@ -143,5 +144,6 @@ async def on_message(message): # only triggers when certain message from others 
 
 # deep division command---------------------------------------------------------------
 
-    
+
+keep_alive()   
 client.run(os.environ['TOKEN']) # Run bot using private token
