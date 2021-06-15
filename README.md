@@ -8,4 +8,4 @@ Goals:
       - Heroku
       - AWS
       - Google Cloud
-  - May use webservers in the future
+  - Using UptimeRobot for web servers
