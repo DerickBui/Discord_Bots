@@ -1,4 +1,4 @@
-# Discord and Replit database libraries
+# Discord library
 import os
 import discord
 import time
@@ -13,19 +13,20 @@ from selenium.common.exceptions import TimeoutException
 
 # Functions--------------------------------------------------------------
 def search(driver, searchWord): # Searches up keyword
-  exploreButton = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[2]/div')
-  exploreButton.click()
-  # wait until the search box has loaded:
+    exploreButton = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div[2]/nav/a[2]/div')
+    exploreButton.click()
+    # wait until the search box has loaded:
 
-  # time.sleep(10)
-  searchBar = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div[1]/div[2]/div/div/div/form/div[1]/div/label/div[2]/div/input')
+    # time.sleep(10)
+    searchBar = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div/div/div/div/div[1]/div[2]/div/div/div/form/div[1]/div/label/div[2]/div/input')
 
-  # enter your search string in the search box:
-  searchBar.send_keys(searchWord)
+    # enter your search string in the search box:
+    searchBar.send_keys(searchWord)
 
-  # submit the query (like hitting return):
-  searchBar.submit()
+    # submit the query (like hitting return):
+    searchBar.submit()
 
+# Setup------------------------------------------------------------------
 driver = webdriver.Chrome('C:\Program Files (x86)\chromedriver.exe')
 driver.wait = WebDriverWait(driver, 10) # create wait process
 
@@ -43,4 +44,24 @@ password = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/ma
 password.send_keys(os.environ['PASSWORD']) # input password
 password.submit()
 
-search(driver, "@uma_musu")
+# Discord Client-------------------------------------------------------
+client = discord.Client()
+
+@client.event # asynchronous library
+async def on_ready(): # only starts when bot is ready and working for use, tells that the bot is online
+  print('We have logged in as {0.user}'.format(client))
+
+@client.event
+# async allows function to run, even if there's delays
+async def on_message(message): # only triggers when certain message from others are received
+    if message.author == client.user:  # if self (bot)
+        return
+
+    if message.content.startswith('-search'): # Scrape twitter term
+        term = message.content.split('-search ')[1]
+
+        await message.channel.send('Searching ' + term)
+        
+        search(driver, term)
+
+client.run(os.environ['TOKEN']) # Run bot using private token
